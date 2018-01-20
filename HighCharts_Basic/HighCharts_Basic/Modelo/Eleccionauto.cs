@@ -7,8 +7,21 @@ namespace HighCharts_Basic.Modelo
 {
     public class Eleccionauto
     {
-        int id, modelo, velocidad, precio;
+        int id, modelo, velocidad, precio, cantidad;
         string marcafavorita, estabilidad;
+
+        public int Cantidad
+        {
+            get
+            {
+                return cantidad;
+            }
+
+            set
+            {
+                cantidad = value;
+            }
+        }
 
         public string Estabilidad
         {

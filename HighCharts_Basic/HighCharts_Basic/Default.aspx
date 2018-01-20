@@ -10,42 +10,81 @@
     <script src="../../code/highcharts.js"></script>
 <script src="../../code/modules/exporting.js"></script>
     
-<script src="/scripts/jquery.js"></script>
-<script src="/scripts/highcharts.js"></script>
-<script src="/scripts/exporting.js"></script>
+    <script src="/scripts/jquery.js"></script>
+    <script src="/scripts/highcharts.js"></script>
+    <script src="/scripts/exporting.js"></script>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+    <link href="bootstrap-3.3.7-dist/css/estiloTexto.css" rel="stylesheet" />
+    
+
 </head>
-<body>
+<body style="background-color:#F2FBEF">
     <form id="form1" runat="server">
-    <div id="container" style="width: 100%;" >
+    <div id="container" style="width: 100%;">
+        <div class="row" >
 
-       <!-- <asp:TextBox ID="TXT" runat="server" Text="id"></asp:TextBox><br />
-        <asp:Label ID="LabelID" runat="server" Text="id"></asp:Label><br />
-        <asp:Label ID="LabelMARCA" runat="server" Text="marca"></asp:Label><br />
-        <asp:Label ID="LabelMODELO" runat="server" Text="modelo"></asp:Label><br />
-        <asp:Label ID="LabelVELOCIDAD" runat="server" Text="velocidad"></asp:Label><br />
-        <asp:Label ID="LabelESTABILIDAD" runat="server" Text="estabilidad"></asp:Label><br />
-        <asp:Label ID="LabelPRECIO" runat="server" Text="precio"></asp:Label><br />
+            <div class="col-lg-12" align="center">
+                <h1 class="fondoTexto">Visualizacion de Datos</h1>
+            </div>
 
-        <asp:Button ID="ButtonMostrar" runat="server" Text="Mostrar" OnClick="ButtonMostrar_Click" />-->
-        <button type="button" id="btnGrafico">LLenar Gráfico</button> 
+            <div id="grafico" class="col-lg-8">
+
+
+            </div>
+
+            <div class="col-lg-4">
+                <br />
+                <br />
+                <br />
+                <br />
+               
+                <div class="text-center">
+                    <h3 class="fondoTexto">Añadir Datos</h3><br />
+                     <asp:Label ID="LabelPRECIO" class="fondoTexto" runat="server" Text="Marca de Auto"></asp:Label>
+                <br />
+                    <asp:TextBox ID="txtBoxMarca" CssClass="input-sm" runat="server" Text=""></asp:TextBox><br />
+
+                <asp:Label ID="Label1" class="fondoTexto" runat="server" Text="Cantidad Vendidos"></asp:Label>
+                <br />
+                    <asp:TextBox ID="textBoxCantidad" CssClass="input-sm" runat="server" Text=""></asp:TextBox><br /><br />
+                
+                    <asp:Button ID="ButtonMostrar" CssClass="btn-group btn-lg btn-primary" runat="server" Text="Agregar" OnClick="ButtonMostrar_Click" />
+               <br />
+                
+                     <button type="button"  class="btn-group btn-lg btn-success" id="btnGrafico">Ver Grafico</button> 
+                    </div>
+                
+        </div>
+
+        </div>
+        
+        
         <hr />
-        <div id="grafico"></div>
+        
         <br />
         <div id="graficaColumna"></div>
     </div>
     </form>
+    <%
+        
+
+         %>
 </body>
+    
     <script>
         $(document).ready(function (){
-            $("#btnGrafico").click("click", function (){
-               DibujaColumna();
+            $("#btnGrafico").click("click", function () {
                ListaCoches();
-               // listaMarca();
 
             });
         });
 
-        function ListaCoches(){
+        
+        function ListaCoches() {
+            
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
@@ -56,66 +95,15 @@
                     var aData = Result.d;
                     var data = [];
                     for (var i in aData) {
-                        var serie = new Array(aData[i].Marca, aData[i].Precio);
+                        var serie = new Array(aData[i].Marca, aData[i].Cantidad);
                         data.push(serie);
                     }
-                    //alert("dddd" + data);
                     DibujaGrafico(data);
-                    //DibujaColumna(data);
-                    //DreawChartPubli(data, 'container2');
                 },
                 error: function (Result) {
                     alert("Errorooo");
                 }
             });
-        }
-        function listaMarca() {
-            var dataM = [];
-            var dataV = [];
-           // $('#ee').ajaxStart({
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "Default.aspx/listaMarc",
-                data: "{}",
-                dataType: "json",
-                success: function (Result) {
-                    var aData = Result.d;
-                    //var dataM = [];
-                    for (var i in aData) {
-                        var serieMarca = new Array(aData[i].Marca);
-                        dataM.push(serieMarca);
-                    }
-
-                    //DibujaColumna(data);
-                },
-                error: function (Result) {
-                    alert("Error Marca");
-                }
-            });
-            //
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "Default.aspx/listaVeloc",
-                data: "{}",
-                dataType: "json",
-                success: function (Result) {
-                    var aData = Result.d;
-                    //var data = [];
-                    for (var i in aData) {
-                        var serieVelo = new Array(aData[i].Velocidad);
-                        dataV.push(serieVelo);
-                    }
-                    alert("dfdf" + dataV);
-
-
-                },
-                error: function (Result) {
-                    alert("Error Velocidad");
-                }
-            });
-            DibujaColumna(dataM, dataV);
         }
 
         function DibujaGrafico (seriesD) {
@@ -127,10 +115,10 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'Precios de Coches'
+                    text: 'Ventas Concesionario'
                 },
                 subtitle:{
-                    text: '¿Cual comprarias?'
+                    text: 'Ventas del año 2017'
                 },
                 tooltip: {
                     pointFormat: '{series.name}: {point.y} (<b>{point.percentage:.1f}%</b>)'
@@ -149,81 +137,13 @@
                     }
                 },
                 series: [{
-                    name: 'Precio:',
+                    name: 'Vendidos:',
                     colorByPoint: true,
                     
                     data: seriesD
                  }]
             });
-        }
-        
-        //function DibujaColumna() {
-        //$('#columna').Highcharts( {
-        
-        function DibujaColumna(/*seriesM, seriesV*/) {
-            $('#graficaColumna').highcharts({
-                // Highcharts.chart('container', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Velocidad del Auto'
-                },
-                subtitle: {
-                    text: 'Mejora cada año'
-                },
-                xAxis: {
-                    title: {
-                        text: 'Modelo (año)'
-                    },
-                    categories: [
-                        '2010',
-                        '2011',
-                        '2012',
-                        '2013'
-                    ],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Velocidad (km/h)'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y:.1f} km/h</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: 
-                    [{
-                    name: 'Renault',
-                    data: [180, 160, 150]
-
-                }, {
-                    name: 'Porshe',
-                    data: [210, 230, 250]
-
-                }, {
-                    name: 'Mazda',
-                    data: [180, 200, 210]
-
-                }, {
-                    name: 'Zusuky',
-                    data: [150, 140, 160]
-
-                }]
-            });
-        }
+        }     
 
     </script>
 </html>

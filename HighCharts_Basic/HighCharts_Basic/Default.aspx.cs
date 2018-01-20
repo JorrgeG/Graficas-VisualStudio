@@ -22,21 +22,24 @@ namespace HighCharts_Basic
 
         }
 
+        
         protected void ButtonMostrar_Click(object sender, EventArgs e)
         {
-            elecct = elecctDAO.mostrarDatos(int.Parse(TXT.Text));
-            LabelID.Text = Convert.ToString( elecct.Id);
-            LabelMARCA.Text = elecct.Marca;
-            LabelMODELO.Text = Convert.ToString(elecct.Modelo);
-            LabelVELOCIDAD.Text = Convert.ToString(elecct.Velocidad);
-            LabelESTABILIDAD.Text = elecct.Estabilidad;
-            LabelPRECIO.Text = Convert.ToString(elecct.Precio);
+
+            elecct.Marca = txtBoxMarca.Text;
+            elecct.Cantidad = int.Parse(textBoxCantidad.Text);
+            elecctDAO.registerBike(elecct);
+
+            txtBoxMarca.Text = "";
+            textBoxCantidad.Text = "";
+
 
         }
 
         [WebMethod()]
         public static List<Eleccionauto> ListaCarro()
         {
+            
             EleccionDAO elecDao = new EleccionDAO();
             return elecDao.viewMotos().ToList();
         }

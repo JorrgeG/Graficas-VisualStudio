@@ -8,14 +8,32 @@ using HighCharts_Basic.Conexion;
 using System.Data;
 using System.Configuration;
 using MySql.Data.MySqlClient;
-
+using System.Web.Services;
 
 namespace HighCharts_Basic.DAO
 {
     public class EleccionDAO
     {
         ConexionBD bdConnect = new ConexionBD("myConnection");
+        //Default f = new Default();
+        public string registerBike( Eleccionauto elc)
+        {
+            bdConnect.openConnect();
 
+            string SQL = ("INSERT INTO eleccioncarro (marcafavorita, modelo, velocidad, estabilidad, precio, cantidad) VALUES (@marcafavorita, @modelo, @velocidad, @estabilidad, @precio, @cantidad)");
+            
+            MySqlCommand cmd = new MySqlCommand(SQL, bdConnect.Connection);
+            cmd.Parameters.AddWithValue("@marcafavorita", elc.Marca);
+            cmd.Parameters.AddWithValue("@modelo", 2000);
+            cmd.Parameters.AddWithValue("@velocidad", 5);
+            cmd.Parameters.AddWithValue("@estabilidad", "buena");
+            cmd.Parameters.AddWithValue("@precio", 1);
+            cmd.Parameters.AddWithValue("@cantidad", elc.Cantidad);
+            cmd.ExecuteNonQuery();
+            bdConnect.closeConnect();
+
+            return "Resitrado";
+        }
         public Eleccionauto mostrarDatos(int carroId)
         {
             Eleccionauto elecc = new Eleccionauto();
@@ -52,7 +70,7 @@ namespace HighCharts_Basic.DAO
             List<Eleccionauto> listBike = new List<Eleccionauto>();
                 bdConnect.openConnect();
             //MySqlCommand cmd = new MySqlCommand("SELECT modelo, COUNT(modelo) as velocidad FROM eleccioncarro group by modelo order by COUNT(modelo) desc", bdConnect.Connection);
-            MySqlCommand cmd = new MySqlCommand("SELECT marcafavorita, precio FROM eleccioncarro", bdConnect.Connection);
+            MySqlCommand cmd = new MySqlCommand("SELECT marcafavorita, cantidad FROM eleccioncarro", bdConnect.Connection);
             MySqlDataReader rd = cmd.ExecuteReader();
             if (rd.HasRows)
             {
@@ -61,7 +79,7 @@ namespace HighCharts_Basic.DAO
                 {
                     Eleccionauto elc = new Eleccionauto();
                     elc.Marca = rd["marcafavorita"].ToString();
-                    elc.Precio = Convert.ToInt32(rd["precio"].ToString());
+                    elc.Cantidad = Convert.ToInt32(rd["cantidad"].ToString());
                     listBike.Add(elc);
 
                     
